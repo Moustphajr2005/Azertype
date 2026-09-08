@@ -9,8 +9,11 @@
  * @param {number} score : le score de l'utilisateur
  * @param {number} nbMotsProposes : le nombre de mots proposés à l'utilisateur
  */
-function afficherResultat(score, nbMotsProposes) {
-    console.log("Votre score est de " + score + " sur " + nbMotsProposes)
+function afficherResultat(score, manches) {
+    let spanScore=document.querySelector(".zoneScore span")
+    let affichageScore=`${score} / ${manches}`
+    spanScore.innerText=affichageScore
+    console.log(`Votre score est de ${score}  sur ${manches}`)
 }
 
 /**
