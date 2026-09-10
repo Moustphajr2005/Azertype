@@ -7,66 +7,52 @@
 /**
  * Cette fonction affiche dans la console le score de l'utilisateur
  * @param {number} score : le score de l'utilisateur
- * @param {number} nbMotsProposes : le nombre de mots proposés à l'utilisateur
+ * @param {number} manches : le nombre de manches jouées
  */
 function afficherResultat(score, manches) {
-    let spanScore=document.querySelector(".zoneScore span")
-    let affichageScore=`${score} / ${manches}`
-    spanScore.innerText=affichageScore
+    let spanScore = document.querySelector(".zoneScore span")
+    let affichageScore = `${score} / ${manches}`
+    spanScore.innerText = affichageScore
     console.log(`Votre score est de ${score}  sur ${manches}`)
 }
 
-/**
- * Cette fonction demande à l'utilisateur de choisir entre "mots" et "phrases" et retourne le choix de l'utilisateur
- * @return {string} : le choix de l'utilisateur, ce choix est nécessairement "mots" ou "phrases
- */
-function choisirPhrasesOuMots() {
-    // Tant que l'utilisateur n'a pas saisi "mots" ou "phrases", on lui redemande de saisir un choix
-    let choix = prompt("Avec quelle liste désirez-vous jouer : 'mots' ou 'phrases' ?")
-    while (choix !== "mots" && choix !== "phrases") {
-        choix = prompt("Avec quelle liste désirez-vous jouer : 'mots' ou 'phrases' ?")
-    }
-    return choix
+function afficherProposition(proposition) {
+    let zoneProposition = document.querySelector(".zoneProposition")
+    zoneProposition.innerText = proposition
 }
 
-/**
- * Cette fonction lance la boucle de jeu, c'est à dire qu'elle demande à l'utilisateur de saisir tous les mots
- * contenus dans le tableau listePropositions. A chaque mot saisi, on incrémente le score de l'utilisateur
- * 
- * @param {array[string]} listePropositions 
- * @return {number} : le score de l'utilisateur
- */
-function lancerBoucleDeJeu(listePropositions) {
-    let score = 0
-    for (let i = 0; i < listePropositions.length; i++) {
-        // On demande à l'utilisateur de saisir le mot correspondant à l'indice i
-        let motUtilisateur = prompt("Entrez le mot : " + listePropositions[i])
-        if (motUtilisateur === listePropositions[i]) {
-            // Si le mot saisi par l'utilisateur est correct, on incrémente le score
-            score++
-        }
-    }
-    return score
-}
-
-/**
- * Cette fonction lance le jeu. 
- * Elle demande à l'utilisateur de choisir entre "mots" et "phrases" et lance la boucle de jeu correspondante
- */
 function lancerJeu() {
     // Initialisations
-    let choix = choisirPhrasesOuMots()
+    let i = 0
     let score = 0
     let manches = 0
 
-    // On détermine la liste des mots ou des phrases à proposer à l'utilisateur
-    if (choix === "mots") {
-        score = lancerBoucleDeJeu(listeMots)
-        manches = listeMots.length
-    } else {
-        score = lancerBoucleDeJeu(listePhrases)
-        manches = listePhrases.length
-    }
+    let btnValiderMot = document.getElementById("btnValiderMot")
+    let inputEcriture = document.getElementById("inputEcriture")
+    afficherProposition(listeMots[i])
+
+    btnValiderMot.addEventListener("click", () => {
+        console.log(inputEcriture.value)
+        let reponseUtilisateur = inputEcriture.value
+
+        if (reponseUtilisateur === listeMots[i]) {
+            score++
+        }
+
+        manches++
+        i++
+
+        afficherResultat(score, manches)
+
+        inputEcriture.value = ''
+
+        if (listeMots[i] === undefined) {
+            afficherProposition("Le jeu est fini")
+            btnValiderMot.disabled = true
+        } else {
+            afficherProposition(listeMots[i])
+        }
+    });
 
     afficherResultat(score, manches)
 }
