@@ -22,37 +22,47 @@ function afficherProposition(proposition) {
 }
 
 function lancerJeu() {
-    // Initialisations
     let i = 0
     let score = 0
     let manches = 0
+    let listeProposition = listeMots
 
     let btnValiderMot = document.getElementById("btnValiderMot")
     let inputEcriture = document.getElementById("inputEcriture")
-    afficherProposition(listeMots[i])
+    let listeBtnRadio = document.querySelectorAll(".optionSource input")
+
+    afficherProposition(listeProposition[i])
+    afficherResultat(score, manches)
+
+    // Changement de source : on repart de zéro
+    for (let index = 0; index < listeBtnRadio.length; index++) {
+        listeBtnRadio[index].addEventListener("change", (event) => {
+            listeProposition = (event.target.value === "1") ? listeMots : listePhrase
+            i = 0
+            score = 0
+            manches = 0
+            btnValiderMot.disabled = false
+            inputEcriture.value = ''
+            afficherProposition(listeProposition[i])
+            afficherResultat(score, manches)
+        })
+    }
 
     btnValiderMot.addEventListener("click", () => {
-        console.log(inputEcriture.value)
-        let reponseUtilisateur = inputEcriture.value
-
-        if (reponseUtilisateur === listeMots[i]) {
+        if (inputEcriture.value === listeProposition[i]) {
             score++
         }
-
         manches++
         i++
 
         afficherResultat(score, manches)
-
         inputEcriture.value = ''
 
-        if (listeMots[i] === undefined) {
+        if (i >= listeProposition.length) {
             afficherProposition("Le jeu est fini")
             btnValiderMot.disabled = true
         } else {
-            afficherProposition(listeMots[i])
+            afficherProposition(listeProposition[i])
         }
-    });
-
-    afficherResultat(score, manches)
+    })
 }
