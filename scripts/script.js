@@ -20,8 +20,13 @@ function afficherProposition(proposition) {
     let zoneProposition = document.querySelector(".zoneProposition")
     zoneProposition.innerText = proposition
 }
+function afficherEmail(nom, email, score) {
+    let mailto = `mailto:${email}?subject=Partage du score Azertype&body=Salut, je suis ${nom} et je viens de réaliser le score ${score} sur le site d'Azertype !`
+    location.href = mailto
+}
 
 function lancerJeu() {
+   
     let i = 0
     let score = 0
     let manches = 0
@@ -65,4 +70,20 @@ function lancerJeu() {
             afficherProposition(listeProposition[i])
         }
     })
-}
+
+
+    let form=document.querySelector("form")
+    form.addEventListener("submit", (event) =>
+        {
+            event.preventDefault
+            console.log("la page ne s'est pas rechargée")
+            // Rexcupérage des valeurs des champs
+            let baliseNom=document.getElementById("nom")
+            let nom=baliseNom.value
+            let baliseEmail=document.getElementById("email")
+            let email=baliseEmail.value
+            console.log(nom,email)
+            let scoreMail=`${score}/${i}`
+            afficherEmail(nom,email,scoreMail)
+    })
+} 
